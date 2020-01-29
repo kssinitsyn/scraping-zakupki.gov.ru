@@ -6,11 +6,12 @@ const nightmare = Nightmare({ show: true });
 
 const url =
   "https://zakupki.gov.ru/epz/contractreporting/quicksearch/search.html";
+const target = "5027130207";
 
 nightmare
   .goto(url)
   .wait("body")
-  .type("#searchString", "5027130207")
+  .type("#searchString", target)
   .click('div.searchField input[type="button"]')
   .wait("body")
   .evaluate(() => document.querySelector("body").innerHTML)
@@ -28,15 +29,16 @@ let getData = html => {
     let title = $(elem)
       .find("dl dt a")
       .text();
-    let date = $(elem)
-      .find("dl:nth-child(2) dt label")
-      .text();
     let description = $(elem)
-      .find("dl dt dd")
+      .find("dl dd")
+      .text();
+    let date = $(elem)
+      .find("dl:nth-child(2) dd")
       .text();
     data.push({
       index: i,
-      title: title,
+      inn: target,
+      title: title.replace(/\s+/g,''),
       date: date,
       description: description
     });
